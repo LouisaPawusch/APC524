@@ -11,7 +11,7 @@ with the class methods first?
 """
 import pytest
 import numpy as np
-from src.APC524.solver import convolve_neighbours_2D, CGOL_rules, MOORE_KERNEL, VON_NEUMANN_KERNEL
+from src.APC524.solver import convolve_neighbours_2D, CGOL_rules, MOORE_KERNEL, VON_NEUMANN_KERNEL, CellularAutomaton
 
 #-----------------------------
 # Test 2D Convolution Solver 
@@ -48,6 +48,14 @@ def test_neighbour_counts_2_states(sample_grid_2_states, kernel):
     just parameterizing and using fixtures for the sake of parameterizing
     and using fixtures... if it would be better to split up these tests we
     definitely can.
+
+    Parameters
+    ----------
+    sample_grid_2_states : np.ndarray
+        the sample grid generated in the fixture
+    kernel : np.ndarray
+        the sample kernel generated in the fixture (iterates search
+        over the Moore and Von Neumann neighbourhoods)
     """
     grid = sample_grid_2_states
     nstates = 2
@@ -166,16 +174,33 @@ def test_CGOL_rules_reproduction(sample_grid_2_states):
     result = CGOL_rules(grid, counts)
     assert result[1, 1] == 1
 
+# ----------------------------
+# Test the CA object
+# ----------------------------
+@pytest.mark.parametrize("kernel", [MOORE_KERNEL, VON_NEUMANN_KERNEL])
+def test_CA_step_with_both_kernels(sample_grid_2_states, kernel):
+    """
+    Test checks whether after stepping, the grid cells change and the 
+    and add to the history (verifies step, rules are being called)
 
-'''@pytest.fixture
-def sample_grid_3_states():
+    We could probably add a much better explicit test here which actively
+    steps through the CA for the initial grid (they all die p fast) and 
+    checks those.
+
+    Parameters
+    ----------
+    sample_grid_2_states : np.ndarray
+        the sample grid generated in the fixture
+    kernel : np.ndarray
+        the sample kernel generated in the fixture (iterates search
+        over the Moore and Von Neumann neighbourhoods)
+    
     """
-    Creates a sample 3 x 3 grid for testing the convolution function on
-    a sample grid with three states for modified CGOL. In this grid, dead
-    is 0, alive is 1 and infected is 2
-    """
-    return np.array([
-        [0, 1, 0],
-        [1, 0, 2],
-        [0, 2, 1]
-    ], dtype=int)'''
+    ca = CellularAutomaton(sample_grid_2_states.copy(), nstates=2, kernel=kernel)
+
+    before = ca.grid.copy()
+    ca.step(CGOL_rules, convolve_neighbours_2D)
+    after = ca.grid
+
+    assert len(ca.history) == 1
+    assert not np.array_equal(before, after)
