@@ -1,3 +1,14 @@
+#!/usr/bin/envs python3
+"""
+test_solver.py
+
+This code tests the helper functions and CA class in src/solver.py
+
+It might be better to refactor everything and have the helper functions
+in a separate utils.py module, but we probably need to decide what to do
+with the class methods first?
+
+"""
 import pytest
 import numpy as np
 from src.APC524.solver import convolve_neighbours_2D, CGOL_rules, MOORE_KERNEL, VON_NEUMANN_KERNEL
@@ -151,7 +162,7 @@ def test_CGOL_rules_reproduction(sample_grid_2_states):
 
     counts = counts = np.zeros((2, 3, 3), dtype=int)
     counts[1, 1, 1] = 3
-    
+
     result = CGOL_rules(grid, counts)
     assert result[1, 1] == 1
 
