@@ -45,9 +45,9 @@ VON_NEUMANN_KERNEL = np.array([
     [0, 1, 0]
 ], dtype=int)
 
-# --------------------------------------------
-# function to count neighbors via convolution 
-# --------------------------------------------
+# ----------------------------------------------------
+# helper functions (could probably refactor to utils)
+# ----------------------------------------------------
 def convolve_neighbours_2D(grid: np.ndarray, kernel : np.ndarray, nstates: int) -> np.ndarray:
     """
     Return the number of cells in a given state for a neighbourhood 
@@ -91,3 +91,71 @@ def convolve_neighbours_2D(grid: np.ndarray, kernel : np.ndarray, nstates: int) 
         # count up from 0 or pass a cval to this function to denote dead state!
 
     return neighbour_counts
+
+def CGOL_rules(grid: np.ndarray, neighbour_counts: np.ndarray) -> np.ndarray:
+    """
+    Function lays out the rules for basic CGOL and determines
+    what happens to each cell in the grid.
+
+    NOTE: I would like to generalize this more and move the
+    generation of the new grid to the overall class. This would
+    allow the user to define their own rule set without having to
+    do all the work of deciding how to assign the grid...
+
+    Parameters
+    ----------
+    grid : np.ndarray
+        the 2D grid on which the game is being played
+    neighbour_counts : np.ndarray
+        the counts for each neighbour in each state as determined
+        by convolve_neighbours_2D
+
+    Returns
+    -------
+    grid_update : np.ndarray
+        the grid for the next step after the rules have been applied
+
+    Example
+    -------
+    >>> 
+    """
+    # make a copy of the grid to be updated in accordance with rules
+    grid_update = np.copy(grid)
+
+    # make boolean masks of the grid states
+    alive = grid == 1
+    dead = grid == 0
+
+    # because we only have 2 states in basic CGOL but convolve_neighbours_2D counts all states
+    # we only need to take the grid counting the living cells (neighbour_counts[1])
+
+    # cell dies of lonliness if it has less than two neighbours
+    grid_update[alive & (neighbour_counts[1] < 2)] = 0
+    # cell lives if it has two or more live neighbours
+    grid_update[alive & ((neighbour_counts[1] == 2) | (neighbour_counts[1] == 3))] = 1
+    # kill cell if it is overcrowded (more than three neighbours)
+    grid_update[alive & (neighbour_counts[1] > 3)] = 0
+    # revive a cell with exactly 3 neighbours
+    grid_update[dead & (neighbour_counts[1] == 3)] = 1
+
+    return grid_update
+
+# ---------------------------------------------------
+# Class for basic CA
+# --------------------------------------------------- 
+
+# NOTE: I guess the goal would be to inherit from here so that we 
+# can do some kind of specific class for a specific initialization 
+# (e.g. we can default init a disease spread scenario or a translation to arduino)
+# but also want the user to be able to define their own CA within our rules
+
+@dataclasses.dataclass
+class CellularAutomaton2D:
+    """
+    Class structure for a very basic, 2 dimensional cellular 
+    automaton. This structure defaults to the CGOL rules.
+    """
+       
+
+
+
