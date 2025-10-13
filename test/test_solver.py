@@ -64,21 +64,21 @@ def test_neighbour_counts_2_states(sample_grid_2_states, kernel):
              [2, 3, 2]], 
 
             # counts for alive state (1)
-             [[1, 1, 1],
-              [1, 2, 1],
-              [1, 1, 1]]
+             [[1, 2, 1],
+              [2, 2, 2],
+              [1, 2, 1]]
         ], dtype=int)
 
     else:
         # assumes Von Neumann, maybe we could do this better?
         expected_counts = np.array([
-            [[2, 2, 1],
-             [2, 4, 2],
-             [1, 2, 2]], 
+            [[2, 1, 2],
+             [1, 4, 1],
+             [2, 1, 2]], 
 
-             [[0, 1, 1],
-              [1, 0, 1],
-              [1, 1, 0]]
+             [[0, 2, 0],
+              [2, 0, 2],
+              [0, 2, 0]]
         ])
 
     assert np.array_equal(neighbour_counts, expected_counts)
