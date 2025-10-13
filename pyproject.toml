@@ -1,0 +1,29 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "APC524"
+version = "0.1.0"
+description = "APC524 Class Project on Conway's Game of Life"
+readme = "README.md"
+requires-python = ">=3.11"
+authors = [
+    { name="Lara Tobias-Tarsh", email="lt0663@princeton.edu",
+      name="Erin O'Neill", email="",
+      name="Louisa Pawusch", email="" }
+]
+license = { text = "MIT" }
+dependencies = [
+    "numpy",
+    "pandas",
+    "matplotlib",
+    "scipy"
+]
+dynamic = ["dependencies"]
+
+[project.optional-dependencies]
+dev = [
+    "pytest",
+    "black",
+]
