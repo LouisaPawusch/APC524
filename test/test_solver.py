@@ -117,6 +117,14 @@ def test_CGOL_rules_underpopulation(sample_grid_2_states):
     result = CGOL_rules(grid, counts)
 
     assert result[1, 1] == 0  # be sure center dies of loneliness
+    
+    counts = np.zeros((2, 3, 3), dtype=int)
+    result = CGOL_rules(grid, counts)
+    assert result[1, 1] == 0
+    
+    
+    
+    
 
 def test_CGOL_rules_survival(sample_grid_2_states):
     """
