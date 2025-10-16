@@ -120,7 +120,7 @@ def test_CGOL_rules_underpopulation(sample_grid_2_states):
 
 def test_CGOL_rules_survival(sample_grid_2_states):
     """
-    Tests rule 2: cells with two or more neighbours survive
+    Tests rule 2: cells with two or more neighbours survive - Yippie :)
 
     Parameters
     ----------
