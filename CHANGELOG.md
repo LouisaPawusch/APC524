@@ -1,6 +1,13 @@
 # Changelog
 
 All notable changes to this project will be documented in this file.
+## [0.0.2] - 10-18-2025
+
+### Changed 
+- Made solver.py more modular
+
+### Added
+- test_convolution.py to test neighbor counts for a simple 2D CA grid
 
 ## [0.0.1] - 10-16-2025
 
