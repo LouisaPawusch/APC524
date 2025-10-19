@@ -28,3 +28,7 @@ dev = [
     "pytest",
     "black",
 ]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["test"]
