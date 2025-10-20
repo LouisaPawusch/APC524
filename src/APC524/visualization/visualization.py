@@ -1,6 +1,8 @@
-import numpy as np
+from __future__ import annotations
+
 import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
+
 
 def animate_automaton(automaton, interval: int = 200, save_as: str | None = None):
     """
@@ -24,15 +26,17 @@ def animate_automaton(automaton, interval: int = 200, save_as: str | None = None
 
     fig, ax = plt.subplots(figsize=(6, 6))
     ax.set_title("Conway's Game of Life")
-    img = ax.imshow(automaton.history[0], cmap='binary')
-    ax.axis('off')
+    img = ax.imshow(automaton.history[0], cmap="binary")
+    ax.axis("off")
 
     def update(frame):
         img.set_data(automaton.history[frame])
         ax.set_title(f"Conway's Game of Life — Step {frame}")
         return [img]
 
-    anim = FuncAnimation(fig, update, frames=len(automaton.history), interval=interval, repeat=True)
+    anim = FuncAnimation(
+        fig, update, frames=len(automaton.history), interval=interval, repeat=True
+    )
 
     if save_as:
         print(f"Saving animation to {save_as}...")
@@ -41,7 +45,7 @@ def animate_automaton(automaton, interval: int = 200, save_as: str | None = None
         elif save_as.endswith(".gif"):
             anim.save(save_as, writer="imagemagick")
         else:
-            raise ValueError("File format not supported. Use .mp4 or .gif")
+            err_msg = "File format not supported. Use .mp4 or .gif"
+            raise ValueError(err_msg)
 
-    plt.show()
     return anim

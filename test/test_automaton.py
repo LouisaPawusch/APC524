@@ -1,11 +1,13 @@
-#!/usr/bin/envs python3
+from __future__ import annotations
 
-import pytest
 import numpy as np
-from APC524.solver.kernels import MOORE_KERNEL, VON_NEUMANN_KERNEL
+import pytest
+
 from APC524.solver.automaton import CellularAutomaton
+from APC524.solver.kernels import MOORE_KERNEL, VON_NEUMANN_KERNEL
 from APC524.solver.rules import CGOL_rules
 from APC524.solver.utils import convolve_neighbours_2D
+
 
 @pytest.fixture
 def sample_grid_2_states():
@@ -15,11 +17,7 @@ def sample_grid_2_states():
     0 and alive is 1.
 
     """
-    return np.array( [
-        [1, 0, 0],
-        [0, 1, 0],
-        [0, 0, 1]
-    ], dtype=int)
+    return np.array([[1, 0, 0], [0, 1, 0], [0, 0, 1]], dtype=int)
 
 
 # ----------------------------
@@ -28,11 +26,11 @@ def sample_grid_2_states():
 @pytest.mark.parametrize("kernel", [MOORE_KERNEL, VON_NEUMANN_KERNEL])
 def test_CA_step_with_both_kernels(sample_grid_2_states, kernel):
     """
-    Test checks whether after stepping, the grid cells change and the 
+    Test checks whether after stepping, the grid cells change and the
     and add to the history (verifies step, rules are being called)
 
     We could probably add a much better explicit test here which actively
-    steps through the CA for the initial grid (they all die p fast) and 
+    steps through the CA for the initial grid (they all die p fast) and
     checks those.
 
     Parameters
@@ -42,7 +40,7 @@ def test_CA_step_with_both_kernels(sample_grid_2_states, kernel):
     kernel : np.ndarray
         the sample kernel generated in the fixture (iterates search
         over the Moore and Von Neumann neighbourhoods)
-    
+
     """
     ca = CellularAutomaton(sample_grid_2_states.copy(), nstates=2, kernel=kernel)
 

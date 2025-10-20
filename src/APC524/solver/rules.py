@@ -1,7 +1,10 @@
 # ---------
-# IMPORTS 
+# IMPORTS
 # ---------
+from __future__ import annotations
+
 import numpy as np
+
 
 def CGOL_rules(grid: np.ndarray, neighbour_counts: np.ndarray) -> np.ndarray:
     """
@@ -28,7 +31,7 @@ def CGOL_rules(grid: np.ndarray, neighbour_counts: np.ndarray) -> np.ndarray:
 
     Example
     -------
-    >>> 
+    >>>
     """
     # make a copy of the grid to be updated in accordance with rules
     grid_update = np.copy(grid)
@@ -50,4 +53,3 @@ def CGOL_rules(grid: np.ndarray, neighbour_counts: np.ndarray) -> np.ndarray:
     grid_update[dead & (neighbour_counts[1] == 3)] = 1
 
     return grid_update
-
