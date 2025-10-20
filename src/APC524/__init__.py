@@ -3,7 +3,7 @@
 This file contains the basic solver for Conway's Game of Life and will be developed
 to add additional levels of complexity to the solver as needed.
 
-The code for this solver was inspired by the cellular automaton forest fires project at 
+The code for this solver was inspired by the cellular automaton forest fires project at
 https://github.com/larantt/clasp410tobiastarsh/tree/main/labs/lab01 and the Game of Life
 with 2D Convolution at https://gist.github.com/mikelane/89c580b7764f04cf73b32bf4e94fd3a3
 

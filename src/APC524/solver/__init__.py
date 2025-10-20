@@ -1,7 +1,9 @@
+from __future__ import annotations
+
 from .automaton import CellularAutomaton
+from .kernels import MOORE_KERNEL, VON_NEUMANN_KERNEL
 from .rules import CGOL_rules
 from .utils import convolve_neighbours_2D
-from .kernels import MOORE_KERNEL, VON_NEUMANN_KERNEL
 
 __all__ = [
     "CellularAutomaton",
@@ -10,4 +12,3 @@ __all__ = [
     "MOORE_KERNEL",
     "VON_NEUMANN_KERNEL",
 ]
-

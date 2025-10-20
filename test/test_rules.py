@@ -1,12 +1,13 @@
-#!/usr/bin/envs python3
+from __future__ import annotations
 
-import pytest
 import numpy as np
-from APC524.solver.kernels import MOORE_KERNEL, VON_NEUMANN_KERNEL
+import pytest
+
 from APC524.solver.rules import CGOL_rules
 
-#-----------------------------
-# Test CGOL Rules 
+
+# -----------------------------
+# Test CGOL Rules
 # ----------------------------
 @pytest.fixture
 def sample_grid_2_states():
@@ -16,15 +17,13 @@ def sample_grid_2_states():
     0 and alive is 1.
 
     """
-    return np.array( [
-        [1, 0, 0],
-        [0, 1, 0],
-        [0, 0, 1]
-    ], dtype=int)
+    return np.array([[1, 0, 0], [0, 1, 0], [0, 0, 1]], dtype=int)
+
 
 # ---------------------------------
 # Test the neighbour rules for CGOL
 # ----------------------------------
+
 
 def test_CGOL_rules_underpopulation(sample_grid_2_states):
     """
@@ -34,7 +33,7 @@ def test_CGOL_rules_underpopulation(sample_grid_2_states):
     Parameters
     ----------
     sample_grid_2_states : np.ndarray
-        the original sample grid 
+        the original sample grid
 
     """
     grid = sample_grid_2_states.copy()
@@ -46,6 +45,7 @@ def test_CGOL_rules_underpopulation(sample_grid_2_states):
 
     assert result[1, 1] == 0  # be sure center dies of loneliness
 
+
 def test_CGOL_rules_survival(sample_grid_2_states):
     """
     Tests rule 2: cells with two or more neighbours survive
@@ -53,7 +53,7 @@ def test_CGOL_rules_survival(sample_grid_2_states):
     Parameters
     ----------
     sample_grid_2_states : np.ndarray
-        the original sample grid 
+        the original sample grid
 
     """
     grid = sample_grid_2_states.copy()
@@ -66,6 +66,7 @@ def test_CGOL_rules_survival(sample_grid_2_states):
     assert result[1, 1] == 1
     assert result[1, 2] == 1
 
+
 def test_CGOL_rules_overcrowding(sample_grid_2_states):
     """
     Tests rule 3: cells with more than 3 live neighbours die from
@@ -74,7 +75,7 @@ def test_CGOL_rules_overcrowding(sample_grid_2_states):
     Parameters
     ----------
     sample_grid_2_states : np.ndarray
-        the original sample grid 
+        the original sample grid
     """
     grid = sample_grid_2_states.copy()
     counts = np.zeros((2, 3, 3), dtype=int)
@@ -83,6 +84,7 @@ def test_CGOL_rules_overcrowding(sample_grid_2_states):
     result = CGOL_rules(grid, counts)
 
     assert result[1, 1] == 0
+
 
 def test_CGOL_rules_reproduction(sample_grid_2_states):
     """
@@ -96,7 +98,7 @@ def test_CGOL_rules_reproduction(sample_grid_2_states):
     grid = sample_grid_2_states.copy()
     grid[1, 1] = 0  # ensure dead
 
-    counts = counts = np.zeros((2, 3, 3), dtype=int)
+    counts = np.zeros((2, 3, 3), dtype=int)
     counts[1, 1, 1] = 3
 
     result = CGOL_rules(grid, counts)
