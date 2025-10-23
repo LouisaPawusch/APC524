@@ -16,3 +16,10 @@ All notable changes to this project will be documented in this file.
 - A rule set to simulate a basic version of Conway's Game of Life
 - A simple tests to confirm everything is working as expected in test/test_solver.py - all tests run as expected locally
 - Content to pyproject.toml so that softtware could be built with hatchling as a backend
+
+## [0.0.2] - 10-23-2025
+
+### Added
+
+- Example as a randomly initialized GCOL in examples/
+- Visualization as animation in src/APC524/visualization.py
