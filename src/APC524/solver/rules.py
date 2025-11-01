@@ -53,3 +53,26 @@ def CGOL_rules(grid: np.ndarray, neighbour_counts: np.ndarray) -> np.ndarray:
     grid_update[dead & (neighbour_counts[1] == 3)] = 1
 
     return grid_update
+
+
+def disease_rules(grid: np.ndarray, neighbour_counts: np.ndarray, 
+                  vaccine_rate: float, mortality_rate : float, vaccine_efficacy: float) -> np.ndarray:
+    """
+    Function implements rules for a disease spread simulation.
+
+    In this simulation, the general rules for CGOL are followed,
+    except that cells may now remain explicitly dead. Once they
+    are dead they can no longer be infected. This rule set also
+    allows for vaccines to be administered (with a certain efficacy)
+    demonstrating how stochasticity can be added to a CA problem.
+
+    Parameters
+    ----------
+    grid : np.ndarray
+        the 2D grid on which the game is being played
+    neighbour_counts: np.ndarray
+        the counts for each neighbour in each state as determined
+        by the convolve_neighbours_2D operation
+    vaccine_rate : np.
+    """
+    pass
