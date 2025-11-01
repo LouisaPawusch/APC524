@@ -37,5 +37,5 @@ def run_cgol_example(save_path, grid_size=(50, 50), steps=100, interval=200):
 
 
 if __name__ == "__main__":
-    save_path = "cgol_animation.gif"  # Change to .mp4 if preferred
+    save_path = "examples/cgol_animation.gif"  # Change to .mp4 if preferred
     run_cgol_example(save_path=save_path)
