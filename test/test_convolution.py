@@ -30,6 +30,12 @@ def kernel(request):
     """
     Fixture to provide both Moore and Von Neumann kernels.
     The test using this fixture will automatically run once per kernel.
+
+    Parameters
+    -----------
+    params : List(np.ndarray)
+        list of kernels used to define neighbours in the 
+        convole2d function
     """
     return request.param
 
