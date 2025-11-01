@@ -1,6 +1,18 @@
 # Changelog
 
 All notable changes to this project will be documented in this file.
+
+## [0.0.3] - 11-01-2025
+This update resolves a conflict between the visualization branch and the
+changes on the `erin_add` branch.
+
+### Changed
+* **[MINOR]** `src/APC524/solver/__init__.py` : all solver modules can now be imported correctly
+* **[MINOR]** `src/APC524/visualization/__init__.py` : fixed a typo so that animation function can be imported correctly
+* **[MINOR]** `src/APC524/__init__.py` : methods in all modules now import like a package would
+* **[MINOR]** `examples/GCOL_example.py` : changed the path where the gif is saved, used random number generator to init grid
+for Ruff compliance, removed link to `src` modules by fixing the `__init__.py` files
+
 ## [0.0.2] - 10-19-2025
 This update adds CI to the project to ensure test compatibility going forward.
 CI is run using pre-commit, nox and GitHub Actions and was tested locally with act.
@@ -37,3 +49,10 @@ CI is run using pre-commit, nox and GitHub Actions and was tested locally with a
 - A rule set to simulate a basic version of Conway's Game of Life
 - A simple tests to confirm everything is working as expected in test/`test_solver.py` - all tests run as expected locally
 - Content to pyproject.toml so that softtware could be built with hatchling as a backend
+
+## [0.0.2] - 10-23-2025
+
+### Added
+
+- Example as a randomly initialized GCOL in examples/
+- Visualization as animation in src/APC524/visualization.py
