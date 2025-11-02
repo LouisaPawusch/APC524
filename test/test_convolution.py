@@ -34,7 +34,7 @@ def kernel(request):
     Parameters
     -----------
     params : List(np.ndarray)
-        list of kernels used to define neighbours in the 
+        list of kernels used to define neighbours in the
         convole2d function
     """
     return request.param

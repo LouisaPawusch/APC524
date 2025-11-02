@@ -3,7 +3,7 @@ from __future__ import annotations
 import numpy as np
 import pytest
 
-from APC524.solver.rules import CGOL_rules
+from APC524.solver.rules import CGOL_RULES_DICT, CGOL_rules
 
 
 # -----------------------------
@@ -17,7 +17,7 @@ def sample_grid_2_states():
     0 and alive is 1.
 
     """
-    return np.array([[1, 0, 0], [0, 1, 0], [0, 0, 1]], dtype=int)
+    return np.array([[1, 0, 0], [0, 1, 0], [0, 0, 1]], dtype=int), CGOL_RULES_DICT
 
 
 # ---------------------------------
@@ -36,12 +36,13 @@ def test_CGOL_rules_underpopulation(sample_grid_2_states):
         the original sample grid
 
     """
-    grid = sample_grid_2_states.copy()
+    sample_grid, rules_dict = sample_grid_2_states
+    grid = sample_grid.copy()
     # make an array with the same shape as the output from the 2D convolution
     counts = np.zeros((2, 3, 3), dtype=int)
 
     counts[1, 1, 1] = 1  # give the center one living neighbour
-    result = CGOL_rules(grid, counts)
+    result = CGOL_rules(grid, counts, rules_dict)
 
     assert result[1, 1] == 0  # be sure center dies of loneliness
 
@@ -56,12 +57,13 @@ def test_CGOL_rules_survival(sample_grid_2_states):
         the original sample grid
 
     """
-    grid = sample_grid_2_states.copy()
+    sample_grid, rules_dict = sample_grid_2_states
+    grid = sample_grid.copy()
     counts = np.zeros((2, 3, 3), dtype=int)
 
     counts[1, 1, 1] = 2
     counts[1, 1, 2] = 3
-    result = CGOL_rules(grid, counts)
+    result = CGOL_rules(grid, counts, rules_dict)
 
     assert result[1, 1] == 1
     assert result[1, 2] == 1
@@ -77,11 +79,12 @@ def test_CGOL_rules_overcrowding(sample_grid_2_states):
     sample_grid_2_states : np.ndarray
         the original sample grid
     """
-    grid = sample_grid_2_states.copy()
+    sample_grid, rules_dict = sample_grid_2_states
+    grid = sample_grid.copy()
     counts = np.zeros((2, 3, 3), dtype=int)
 
     counts[1, 1, 1] = 4
-    result = CGOL_rules(grid, counts)
+    result = CGOL_rules(grid, counts, rules_dict)
 
     assert result[1, 1] == 0
 
@@ -95,11 +98,12 @@ def test_CGOL_rules_reproduction(sample_grid_2_states):
     sample_grid_2_states : np.ndarray
         the original sample grid
     """
-    grid = sample_grid_2_states.copy()
+    sample_grid, rules_dict = sample_grid_2_states
+    grid = sample_grid.copy()
     grid[1, 1] = 0  # ensure dead
 
     counts = np.zeros((2, 3, 3), dtype=int)
     counts[1, 1, 1] = 3
 
-    result = CGOL_rules(grid, counts)
+    result = CGOL_rules(grid, counts, rules_dict)
     assert result[1, 1] == 1
