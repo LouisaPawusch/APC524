@@ -1,6 +1,13 @@
 # Changelog
 
 All notable changes to this project will be documented in this file.
+## [0.0.5] - 11-03-2025
+Added new tests, added a new rules set for disease spread
+
+### Added
+* **[MAJOR]** `src/APC524/rules.py` : adjusted init function for CGOL to improve the usability, created a new init and rules function
+for a disease spread simulation.
+* **[MINOR]** `tests/test_rules.py` : added new tests for new rules, including test for stochastic behavior
 
 ## [0.0.4] - 11-01-2025
 Made some substantial changes to the cellular automaton object to allow
