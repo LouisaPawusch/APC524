@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from .automaton import CellularAutomaton
 from .kernels import MOORE_KERNEL, VON_NEUMANN_KERNEL
-from .rules import CGOL_init, CGOL_rules
+from .rules import CGOL_init, CGOL_rules, disease_init, disease_rules
 from .utils import convolve_neighbours_2D
 
 __all__ = [
@@ -12,4 +12,6 @@ __all__ = [
     "convolve_neighbours_2D",
     "MOORE_KERNEL",
     "VON_NEUMANN_KERNEL",
+    "disease_rules",
+    "disease_init",
 ]

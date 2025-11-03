@@ -71,6 +71,7 @@ class CellularAutomaton:
             raise ValueError(kernel_err)
 
         neighbour_counts = convolution_fn(self.grid, self.kernel, self.nstates)
+        # breakpoint()
         self.grid = rules_fn(
             self.grid, neighbour_counts, states_dict=self.states_dict, **kwargs
         )

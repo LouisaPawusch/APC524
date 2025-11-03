@@ -114,6 +114,7 @@ def disease_init(
     kernel=MOORE_KERNEL,
     grid_size=(50, 50),
     vaccine_rate=0.0,
+    initial_infection_rate=None,
     rng=None,
 ):
     """
@@ -156,8 +157,18 @@ def disease_init(
     rng = rng or np.random.default_rng()
     states_dict = DISEASE_RULES_DICT
 
-    # define a grid with only healthy and infected values first as in traditional CGOL
-    grid = rng.choice([states_dict["infected"], states_dict["healthy"]], size=grid_size)
+    # If initial_infection_rate is not provided, preserve original behavior
+    if initial_infection_rate is None:
+        # roughly 50% infected / 50% healthy (like before)
+        grid = rng.choice(
+            [states_dict["infected"], states_dict["healthy"]], size=grid_size
+        )
+    else:
+        # start all healthy
+        grid = np.full(grid_size, states_dict["healthy"], dtype=int)
+        # infect a fraction of cells
+        mask_infected = rng.random(grid.shape) < initial_infection_rate
+        grid[mask_infected] = states_dict["infected"]
 
     # now based on the vaccine rate, make some immune
     mask = rng.random(grid.shape) < vaccine_rate
@@ -167,6 +178,8 @@ def disease_init(
         grid=grid,
         kernel=kernel,
         states_dict=states_dict,
+        nstates=len(states_dict),
+        history=[grid.copy()],
     )
 
 
