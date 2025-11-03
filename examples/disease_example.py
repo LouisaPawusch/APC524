@@ -22,8 +22,8 @@ def run_disease_example(save_path, grid_size=(50, 100), steps=100, interval=200)
     mortality_rate = 0.33
     vaccine_efficacy = 0.8
     infection_rate = 0.25
-    recovery_rate = 0.1
-    initial_infection_rate = 0.05
+    recovery_rate = 0.2
+    initial_infection_rate = 0.005
     initial_vax_rate = 0.1
 
     # Create CA instance

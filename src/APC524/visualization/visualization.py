@@ -4,7 +4,29 @@ import matplotlib.pyplot as plt
 import numpy as np
 from matplotlib.animation import FuncAnimation
 from matplotlib.colors import ListedColormap
-from matplotlib.patches import Patch
+
+
+def bold_axes(ax):
+    """
+    Sets matplotlib axes linewidths to 2, making them
+    bold and more attractive
+
+    Parameters
+    -----------
+    ax : mpl.Axes
+        axes to be bolded
+    """
+    for axis in ["top", "bottom", "left", "right"]:
+        ax.spines[axis].set_linewidth(2)
+
+    # increase tick width
+    ax.tick_params(width=2)
+
+    for label in ax.get_xticklabels():
+        label.set_weight("bold")
+
+    for label in ax.get_yticklabels():
+        label.set_weight("bold")
 
 
 def animate_automaton(automaton, interval: int = 200, save_as: str | None = None):
@@ -92,7 +114,7 @@ def animate_disease(
 
     # plotting the heatmap
     fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(12, 12))
-    ax1.set_title("Epidemic Simulation")
+    ax1.set_title("Epidemic Simulation", loc="right", fontweight="bold", fontsize=14)
     img = ax1.imshow(automaton.history[0], cmap=cmap, vmin=0, vmax=len(states_dict) - 1)
     ax1.axis("off")
 
@@ -113,26 +135,32 @@ def animate_disease(
     ax2.set_ylabel("Number of Cells")
 
     lines = [
-        ax2.plot([], [], color=colormap[i], label=name)[0]
+        ax2.plot([], [], color=colormap[i], label=name, lw=2)[0]
         for i, name in enumerate(states_dict)
     ]
 
-    ax2.set_xlabel("Step")
-    ax2.set_ylabel("Number of Cells")
+    legend_props = {"size": 12, "weight": "bold"}
+    ax2.legend(frameon=False, ncols=2, loc="upper right", prop=legend_props)
+
+    ax2.set_xlabel("Step", fontweight="bold", fontsize=14)
+    ax2.set_ylabel("Number of Cells", fontweight="bold", fontsize=14)
+
+    # format all the lines that will be plotted and updated in the sim
     lines = [
-        ax2.plot([], [], color=colormap[i], label=name, lw=2)[0]
+        ax2.plot([], [], color=colormap[i], lw=2)[0]
         for i, name in enumerate(list(states_dict.keys()))
     ]
 
-    # spoof legend
-    legend_elements = [
-        Patch(color=colormap[i], label=name) for i, name in enumerate(states_dict)
-    ]
-    ax1.legend(handles=legend_elements, bbox_to_anchor=(1.05, 1), loc="upper left")
+    bold_axes(ax2)
+    ax2.set_title(
+        "Time Evolution of Disease Spread", fontweight="bold", fontsize=14, loc="left"
+    )
 
     def update(frame):
         img.set_data(automaton.history[frame])
-        ax1.set_title(f"Disease Spread — Step {frame}")
+        ax1.set_title(
+            f"Disease Spread — Step {frame}", loc="left", fontweight="bold", fontsize=14
+        )
 
         # update lines
         xdata = np.arange(frame + 1)
