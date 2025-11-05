@@ -17,7 +17,10 @@ def sample_grid_2_states():
     0 and alive is 1.
 
     """
-    return np.array([[1, 0, 0], [0, 1, 0], [0, 0, 1]], dtype=int)
+    grid = np.array([[1, 0, 0], [0, 1, 0], [0, 0, 1]], dtype=int)
+    nstates = 2
+    states_dict = {"dead": 0, "alive": 1}
+    return grid, nstates, states_dict
 
 
 # ----------------------------
@@ -42,7 +45,11 @@ def test_CA_step_with_both_kernels(sample_grid_2_states, kernel):
         over the Moore and Von Neumann neighbourhoods)
 
     """
-    ca = CellularAutomaton(sample_grid_2_states.copy(), nstates=2, kernel=kernel)
+    grid, nstates, states_dict = sample_grid_2_states
+
+    ca = CellularAutomaton(
+        grid=grid.copy(), nstates=nstates, kernel=kernel, states_dict=states_dict
+    )
 
     before = ca.grid.copy()
     ca.step(CGOL_rules, convolve_neighbours_2D)

@@ -1,6 +1,24 @@
 # Changelog
 
 All notable changes to this project will be documented in this file.
+## [0.0.5] - 11-03-2025
+Added new tests, added a new rules set for disease spread
+
+### Added
+* **[MAJOR]** `src/APC524/rules.py` : adjusted init function for CGOL to improve the usability, created a new init and rules function
+for a disease spread simulation.
+* **[MINOR]** `tests/test_rules.py` : added new tests for new rules, including test for stochastic behavior
+
+## [0.0.4] - 11-01-2025
+Made some substantial changes to the cellular automaton object to allow
+for more flexibility in specifying rules functions.
+
+### Added
+* **[MAJOR]** `src/APC524/automaton.py` : added new class method `from_rules` so that a rules function can be used to specify and initialize grids
+* **[MAJOR]** `src/APC524/automaton.py` : added new attr `states_dict` which allows more flexibility and transparency defining rules
+* **[MAJOR]** `src/APC524/rules.py`: changed `CGOL_rules` to allow it to initialize the grid via a random number generator and a rules dictionary
+as well as stepping.
+* **[MINOR]** `test/test_automaton.py` : updated to use the new initialization method.
 
 ## [0.0.3] - 11-01-2025
 This update resolves a conflict between the visualization branch and the

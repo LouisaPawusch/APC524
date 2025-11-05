@@ -3,13 +3,10 @@ from __future__ import annotations
 import sys
 from pathlib import Path
 
-import numpy as np
-
 sys.path.append(str(Path(__file__).parent.parent / "src"))
 
 from APC524.solver import (
-    MOORE_KERNEL,
-    CellularAutomaton,
+    CGOL_init,
     CGOL_rules,
     convolve_neighbours_2D,
 )
@@ -21,12 +18,9 @@ def run_cgol_example(save_path, grid_size=(50, 50), steps=100, interval=200):
     Example script to run Conway's Game of Life using the CellularAutomaton class
     and visualize it with the animate_automaton function.
     """
-    # Initialize random grid (switch to numpy random number generator for Ruff compliance)
-    rng = np.random.default_rng()
-    grid = rng.choice([0, 1], size=grid_size)
 
     # Create CA instance
-    ca = CellularAutomaton(grid=grid, nstates=2, kernel=MOORE_KERNEL)
+    ca = CGOL_init(grid_size=grid_size)
 
     # Run a few steps
     for _ in range(steps):
