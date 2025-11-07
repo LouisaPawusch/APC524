@@ -22,9 +22,7 @@ dependencies = [
     "matplotlib",
     "pytest",
     "scipy",
-    "nox",
-    "simpleaudio",
-    "moviepy==1.0.3"
+    "nox"
 ]
 
 [dependency-groups]
@@ -43,6 +41,11 @@ docs = [
     "myst_parser >=0.13",
     "sphinx-markdown-builder",
     "sphinx_copybutton",
+]
+
+audio = [
+    "simpleaudio",
+    "moviepy==1.0.3"
 ]
 
 [tool.ruff.lint]
