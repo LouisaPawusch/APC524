@@ -22,7 +22,9 @@ dependencies = [
     "matplotlib",
     "pytest",
     "scipy",
-    "nox"
+    "nox",
+    "simpleaudio",
+    "moviepy==1.0.3"
 ]
 
 [dependency-groups]
