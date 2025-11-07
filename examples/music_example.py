@@ -9,15 +9,13 @@ from APC524.solver import (
     CGOL_rules,
     convolve_neighbours_2D,
 )
-
+from APC524.sonification.sonification import merge_audio_video, sonify_automaton
 from APC524.visualization import animate_automaton
-from APC524.sonification.sonification import sonify_automaton, merge_audio_video
+
 
 def run_sonified_cgol_example(
-    save_name: str,
-    grid_size=(50, 50),
-    steps=100,
-    interval=200):
+    save_name: str, grid_size=(50, 50), steps=100, interval=200
+):
     """
     Example script to run Conway's Game of Life using the CellularAutomaton class,
     visualize it, and sonify its evolution.

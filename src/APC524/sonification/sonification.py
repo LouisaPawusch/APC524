@@ -1,9 +1,9 @@
-from email.mime import audio
+from __future__ import annotations
+
 import numpy as np
-import simpleaudio as sa
-from time import sleep
+from moviepy.editor import AudioFileClip, VideoFileClip
 from scipy.io.wavfile import write as wavwrite
-from moviepy.editor import VideoFileClip, AudioFileClip
+
 
 def count_living_cells(grid):
     """
@@ -59,6 +59,7 @@ def map_count_to_freq(count, grid_size, scale=None):
     freq = base_freq * scale[index]
     return round(freq, 1)
 
+
 def make_tone(frequency, duration=0.2, volume=0.3, sample_rate=44100):
     """
     Generates a tone at the given frequency.
@@ -82,8 +83,7 @@ def make_tone(frequency, duration=0.2, volume=0.3, sample_rate=44100):
     t = np.linspace(0, duration, int(sample_rate * duration), False)
     tone = np.sin(frequency * t * 2 * np.pi)
     audio = tone * (32767 * volume)
-    audio = audio.astype(np.int16)
-    return audio
+    return audio.astype(np.int16)
 
 
 def sonify_automaton(automaton, interval=200, save_audio_as=None):
@@ -108,7 +108,7 @@ def sonify_automaton(automaton, interval=200, save_audio_as=None):
     -------
     None
 
-    Raises 
+    Raises
     ------
     ValueError
         If automaton is None.
@@ -118,7 +118,7 @@ def sonify_automaton(automaton, interval=200, save_audio_as=None):
     if automaton is None:
         err_msg = "Automaton instance must be provided"
         raise ValueError(err_msg)
-    
+
     total_cells = automaton.history[0].size
     print(f"Total cells in grid: {total_cells}")
     sample_rate = 44100
@@ -168,6 +168,8 @@ def merge_audio_video(video_path, audio_path, output_path):
     audio_clip = AudioFileClip(audio_path)
 
     final_clip = video_clip.set_audio(audio_clip)
-    final_clip.write_videofile(output_path, codec="libx264", audio_codec="aac", fps=24, logger=None)
+    final_clip.write_videofile(
+        output_path, codec="libx264", audio_codec="aac", fps=24, logger=None
+    )
 
     print(f"✅ Merged audio and video saved to {output_path}")
