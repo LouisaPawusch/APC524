@@ -16,23 +16,30 @@ def CGOL_init(
     kernel=MOORE_KERNEL, grid_size=(50, 50), states_dict=CGOL_RULES_DICT, rng=None
 ):
     """
-    Fully initializes a CA for Conway's Game of Life.
-    Returns a CellularAutomaton object ready to step.
+    Initialize a Cellular Automaton for Conway's Game of Life.
 
     Parameters
     ----------
     kernel : np.ndarray
-        the kernel used to initialize the ca object, used by convolution
+        Neighborhood convolution kernel. Must be 2D.
     grid_size : tuple[int, int]
-        tuple of integers defining the grid size
-    rng : np.random.rng
-        random number generatore, default is to create inside the grid,
-        usually only worth defining for testing
+        Size of the grid. Must be positive integers.
+    states_dict : dict[str, int]
+        Mapping of state names to integer values. Must contain 'ALIVE' and 'DEAD'.
+    rng : np.random.Generator, optional
+        Random number generator. If None, `np.random.default_rng()` is used.
 
     Returns
     -------
-        : CellularAutomaton
-        CA object you created to play CGOL
+    CellularAutomaton
+        Initialized CA simulation.
+
+    Examples
+    --------
+    >>> from APC524.solver.automaton import CGOL_init
+    >>> ca = CGOL_init(grid_size=(10, 10))
+    >>> ca.grid.shape
+    (10, 10)
     """
     rng = rng or np.random.default_rng()
 
@@ -51,32 +58,32 @@ def CGOL_init(
 
 def CGOL_rules(grid=None, neighbour_counts=None, states_dict=None):
     """
-    Function lays out the rules for basic CGOL and determines
-    what happens to each cell in the grid.
-
-    NOTE: I would like to generalize this more and move the
-    generation of the new grid to the overall class. This would
-    allow the user to define their own rule set without having to
-    do all the work of deciding how to assign the grid...
+    Apply Conway's Game of Life rules to a grid.
 
     Parameters
     ----------
     grid : np.ndarray
-        the 2D grid on which the game is being played
+        Current grid state.
     neighbour_counts : np.ndarray
-        the counts for each neighbour in each state as determined
-        by convolve_neighbours_2D
-    states_dict : Dict[str, int]
-        Dictionary defining the possible states for a cell
+        Count of live neighbors for each cell.
+    states_dict : dict[str, int]
+        Defines the cell state integer values.
 
     Returns
     -------
-    grid_update : np.ndarray
-        the grid for the next step after the rules have been applied
+    np.ndarray
+        Updated grid state.
 
-    Example
-    -------
-    >>>
+    Raises
+    ------
+    ValueError
+        If `grid` and `neighbour_counts` do not have matching shapes.
+    KeyError
+        If required states ('ALIVE', 'DEAD') are missing from `states_dict`.
+
+    Examples
+    --------
+    >>> new_grid = CGOL_rules(grid, neighbour_counts, states_dict)
     """
 
     # apply the rules
@@ -118,27 +125,32 @@ def disease_init(
     rng=None,
 ):
     """
-    Function initializes a grid for the disease spread cellular
-    automaton experiment
+    Initialize a cellular automaton for disease spread modeling.
 
     Parameters
-    -----------
-    states_dict : dict[str, int]:
-        dictionary defining the values associated with each cell state
+    ----------
+    states_dict : dict[str, int], optional
+        Mapping of named disease states to integer values.
     kernel : np.ndarray
-        the kernel used by the rules function to update neighbours
+        Convolution kernel.
     grid_size : tuple[int, int]
-        tuple defining the size of the grid on which to play the game
-    vaccine_rate : float (0.0 -> 1.0):
-        the proportion of the population that are vaccinated against the
-        disease at the beginning of the simulation
-    rng : np.random.rng()
-        numpy random number generator, usually passed in for testing only
+        Grid dimensions.
+    vaccine_rate : float
+        Fraction of initially vaccinated individuals (0 to 1).
+    initial_infection_rate : float, optional
+        Fraction of initially infected cells. If None, defaults to 0.5.
+    rng : np.random.Generator, optional
+        Random number generator.
 
     Returns
     -------
-    ca : CellularAutomaton
-        a cellular automaton object which is then used to play the game
+    CellularAutomaton
+        Initial disease CA system.
+
+    Raises
+    ------
+    ValueError
+        If `vaccine_rate` or `initial_infection_rate` are outside [0, 1].
 
     Examples
     --------
@@ -154,6 +166,11 @@ def disease_init(
     (20, 20)
 
     """
+    # check initial values
+    if vaccine_rate > 1.0:
+        err_msg = "parameter vaccine_rate must be an integer between 0 and 1"
+        raise ValueError(err_msg)
+    
     rng = rng or np.random.default_rng()
     states_dict = DISEASE_RULES_DICT
 
@@ -164,6 +181,10 @@ def disease_init(
             [states_dict["infected"], states_dict["healthy"]], size=grid_size
         )
     else:
+        if initial_infection_rate > 1.0:
+            err_msg = "parameter initial_infection_rate must be an integer between 0 and 1"
+            raise ValueError(err_msg)
+        
         # start all healthy
         grid = np.full(grid_size, states_dict["healthy"], dtype=int)
         # infect a fraction of cells
@@ -195,49 +216,60 @@ def disease_rules(
     rng=None,
 ) -> np.ndarray:
     """
-    Function implements rules for a disease spread simulation.
-
-    In this simulation, the general rules for CGOL are followed,
-    except that cells may now remain explicitly dead. Once they
-    are dead they can no longer be infected. This rule set also
-    allows for vaccines to be administered (with a certain efficacy)
-    demonstrating how stochasticity can be added to a CA problem.
-
-    It would be interesting to add some knowledge of history to
-    the problem (e.g. the longer it takes for a cell to recover
-    the more likely it is to die - could do by checking history
-    in the ca object for each cell and creating a multiplier for
-    mortality rate here?)
+    Apply disease transition rules to the grid.
 
     Parameters
     ----------
     grid : np.ndarray
-        the 2D grid on which the game is being played
-    neighbour_counts: np.ndarray
-        the counts for each neighbour in each state as determined
-        by the convolve_neighbours_2D operation
-    states_dict : dict[Str, int]
-        dictionary of states that each cell could be in as defined in the init function.
+        The current state grid.
+    neighbour_counts : np.ndarray
+        Neighbor state counts.
+    states_dict : dict[str, int]
+        Disease state-to-integer mapping.
     mortality_rate : float
-        mortality rate of a given disease (between 0.0 and 1.0)
+        Probability an infected cell dies per step.
     vaccine_efficacy : float
-        chance that a vaccinated person will get the disease anyway (between 0.0 and 1.0)
+        Probability vaccination prevents infection.
     infection_rate : float
-        chance that a person next to a vaccinated person will get infected (between 0.0 and 1.0)
+        Base infection prob. per infected neighbor.
     recovery_rate : float
-        chance that a living, infected person will recover at the next timestep
-    rebirth = bool
-        should the function allow the CGOL rule of rebirth (exactly 3 living neighbours)
+        Probability an infected cell recovers per step.
+    rebirth : bool
+        Whether recovered cells can become susceptible again under CGOL rules.
+    rng : np.random.Generator, optional
+        Random number generator.
 
     Returns
     -------
-    grid_update : np.ndarray
-        the grid for the next step after the rules have been applied
+    np.ndarray
+        Updated grid state.
+
+    Raises
+    ------
+    ValueError
+        If any probability parameter is outside [0, 1].
+    ValueError
+        If `grid` and `neighbour_counts` shapes do not match.
 
     Examples
     --------
-    >>>
+    >>> updated_grid = disease_rules(grid, neighbour_counts, states_dict,
+    ...                              mortality_rate=0.01,
+    ...                              vaccine_efficacy=0.8,
+    ...                              infection_rate=0.2,
+    ...                              recovery_rate=0.1)
     """
+    for name, param in [
+        ("mortality_rate", mortality_rate),
+        ("vaccine_efficacy", vaccine_efficacy),
+        ("infection_rate", infection_rate),
+        ("recovery_rate", recovery_rate),
+    ]:
+        if param is None:
+            continue  # allow None if not required
+        if not (0 <= param <= 1):
+            raise ValueError(f"{name} must be between 0 and 1, got {param}")
+        
     # define random number generator for disease spread
     rng = rng or np.random.default_rng()
 
