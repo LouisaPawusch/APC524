@@ -48,7 +48,7 @@ def random_seed(request):
     --------
     >>> seed = random_seed(request)
     """
-    
+
     return request.param
 
 
@@ -86,7 +86,7 @@ def test_CGOL_init_3x3(random_seed):
 def test_CGOL_init_2x5(random_seed):
     """
     Test CGOL_init function for a 2x5 grid with a specific random seed.
-    
+
     Parameters
     ----------
     random_seed : int
@@ -143,7 +143,7 @@ def vaccine_rate(request):
     --------
     >>> rate = vaccine_rate(request)
     """
-    
+
     return request.param
 
 
@@ -201,7 +201,7 @@ def sample_grid_2_states():
     >>> sample_grid_2_states()
     (array([[1,0,0],[0,1,0],[0,0,1]]), {'dead':0, 'alive':1})
     """
-    
+
     return np.array([[1, 0, 0], [0, 1, 0], [0, 0, 1]], dtype=int), CGOL_RULES_DICT
 
 
@@ -223,7 +223,7 @@ def test_CGOL_rules_underpopulation(sample_grid_2_states):
     --------
     >>> test_CGOL_rules_underpopulation(sample_grid_2_states)
     """
-    
+
     sample_grid, rules_dict = sample_grid_2_states
     grid = sample_grid.copy()
     # make an array with the same shape as the output from the 2D convolution
@@ -281,7 +281,7 @@ def test_CGOL_rules_overcrowding(sample_grid_2_states):
     --------
     >>> test_CGOL_rules_overcrowding(sample_grid_2_states)
     """
-    
+
     sample_grid, rules_dict = sample_grid_2_states
     grid = sample_grid.copy()
     counts = np.zeros((2, 3, 3), dtype=int)
@@ -309,7 +309,7 @@ def test_CGOL_rules_reproduction(sample_grid_2_states):
     --------
     >>> test_CGOL_rules_reproduction(sample_grid_2_states)
     """
-    
+
     sample_grid, rules_dict = sample_grid_2_states
     grid = sample_grid.copy()
     grid[1, 1] = 0  # ensure dead
