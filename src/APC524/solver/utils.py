@@ -14,7 +14,7 @@ def convolve_neighbours_2D(
     Compute the number of neighbors in each state for a 2D cellular automaton grid.
 
     This function applies a 2D convolution to count, for each cell, how many of its
-    neighbors are in each possible state. It returns a 3D array with dimensions 
+    neighbors are in each possible state. It returns a 3D array with dimensions
     (nstates, rows, cols), where each "layer" corresponds to counts for a given state.
 
     Parameters

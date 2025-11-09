@@ -170,7 +170,7 @@ def disease_init(
     if vaccine_rate > 1.0:
         err_msg = "parameter vaccine_rate must be an integer between 0 and 1"
         raise ValueError(err_msg)
-    
+
     rng = rng or np.random.default_rng()
     states_dict = DISEASE_RULES_DICT
 
@@ -182,9 +182,11 @@ def disease_init(
         )
     else:
         if initial_infection_rate > 1.0:
-            err_msg = "parameter initial_infection_rate must be an integer between 0 and 1"
+            err_msg = (
+                "parameter initial_infection_rate must be an integer between 0 and 1"
+            )
             raise ValueError(err_msg)
-        
+
         # start all healthy
         grid = np.full(grid_size, states_dict["healthy"], dtype=int)
         # infect a fraction of cells
@@ -268,8 +270,9 @@ def disease_rules(
         if param is None:
             continue  # allow None if not required
         if not (0 <= param <= 1):
-            raise ValueError(f"{name} must be between 0 and 1, got {param}")
-        
+            err_msg = f"{name} must be between 0 and 1, got {param}"
+            raise ValueError(err_msg)
+
     # define random number generator for disease spread
     rng = rng or np.random.default_rng()
 
