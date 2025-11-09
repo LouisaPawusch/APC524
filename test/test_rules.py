@@ -32,23 +32,42 @@ EXPECTED_GRIDS_CGOL_2x5 = {
 @pytest.fixture(params=[42, 32])
 def random_seed(request):
     """
-    returns a random seed to check for different
-    CGOL initializations (checks stochastic behavior)
+    Provides a random seed for testing CGOL initializations.
+
+    Parameters
+    ----------
+    request : _pytest.fixtures.SubRequest
+        Pytest fixture request object.
+
+    Returns
+    --------
+        int
+            A random seed value.
+
+    Examples
+    --------
+    >>> seed = random_seed(request)
     """
+    
     return request.param
 
 
 def test_CGOL_init_3x3(random_seed):
     """
-    tests the initialization function for CGOL_init using
-    a random seed to ensure the grid is initialized correctly
-    for a 3x3 grid.
+    Test CGOL_init function for a 3x3 grid with a specific random seed.
 
     Parameters
     ----------
-    random_seed : pytest.fixture[float]
-        different random seeds to use to ensure the random
-        initialization starts correctly
+    random_seed : int
+        Random seed for initializing the automaton.
+
+    Returns
+    -------
+    None
+
+    Examples
+    --------
+    >>> test_CGOL_init_3x3(42)
     """
 
     rng = np.random.default_rng(random_seed)
@@ -66,15 +85,20 @@ def test_CGOL_init_3x3(random_seed):
 
 def test_CGOL_init_2x5(random_seed):
     """
-    tests the initialization function for CGOL_init using
-    a random seed to ensure the grid is initialized correctly
-    for a 2x5 grid.
-
+    Test CGOL_init function for a 2x5 grid with a specific random seed.
+    
     Parameters
     ----------
-    random_seed : pytest.fixture[float]
-        different random seeds to use to ensure the random
-        initialization starts correctly
+    random_seed : int
+        Random seed for initializing the automaton.
+
+    Returns
+    -------
+    None
+
+    Examples
+    --------
+    >>> test_CGOL_init_2x5(32)
     """
 
     rng = np.random.default_rng(random_seed)
@@ -103,22 +127,42 @@ EXPECTED_GRIDS_DISEASE = {
 @pytest.fixture(params=[0.0, 0.33, 0.5, 0.66, 1.0])
 def vaccine_rate(request):
     """
-    returns a vaccine rate for the test_disease_init
-    function to use (checks stochastic behavior)
+    Provide a vaccine rate for testing disease_init function.
+
+    Parameters
+    ----------
+    request : _pytest.fixtures.SubRequest
+        Pytest fixture request object.
+
+    Returns
+    -------
+    float
+        Vaccine rate to use for initialization.
+
+    Examples
+    --------
+    >>> rate = vaccine_rate(request)
     """
+    
     return request.param
 
 
 def test_disease_init(vaccine_rate):
     """
-    tests the initialization function for test_disease_init using
-    a random seed to ensure the grid is initialized correctly.
+    Test disease_init function for correct grid initialization with vaccination.
 
     Parameters
     ----------
-    vaccine_rate : pytest.fixture[float]
-        different vaccination rates to use to ensure the random
-        initialization starts correctly
+    vaccine_rate : float
+        Fraction of cells initialized as immune.
+
+    Returns
+    -------
+    None
+
+    Examples
+    --------
+    >>> test_disease_init(0.1)
     """
 
     seed = 42
@@ -142,26 +186,44 @@ def test_disease_init(vaccine_rate):
 @pytest.fixture
 def sample_grid_2_states():
     """
-    Creates a sample 3 x 3 grid for testing the rules function on
-    a sample grid with two states for basic CGOL. In this grid, dead is
-    0 and alive is 1.
+    Provides a sample 3x3 CGOL grid for testing rules functions. The grid has two states: dead (0) and alive (1).
 
+    Returns
+    -------
+    tuple
+        grid : np.ndarray
+            Sample 3x3 grid.
+        rules_dict : dict
+            CGOL state dictionary.
+
+    Examples
+    --------
+    >>> sample_grid_2_states()
+    (array([[1,0,0],[0,1,0],[0,0,1]]), {'dead':0, 'alive':1})
     """
+    
     return np.array([[1, 0, 0], [0, 1, 0], [0, 0, 1]], dtype=int), CGOL_RULES_DICT
 
 
 ## check all neighbour rules for CGOL ##
 def test_CGOL_rules_underpopulation(sample_grid_2_states):
     """
-    Tests rule 1: Cells with less than 2 neighbours die
-    of lonliness :(
+    Test rule 1: live cells with fewer than two live neighbors die of underpopulation.
 
     Parameters
     ----------
-    sample_grid_2_states : np.ndarray
-        the original sample grid
+    sample_grid_2_states : tuple
+        Fixture providing a sample 3x3 CGOL grid and state dictionary.
 
+    Returns
+    -------
+    None
+
+    Examples
+    --------
+    >>> test_CGOL_rules_underpopulation(sample_grid_2_states)
     """
+    
     sample_grid, rules_dict = sample_grid_2_states
     grid = sample_grid.copy()
     # make an array with the same shape as the output from the 2D convolution
@@ -175,13 +237,20 @@ def test_CGOL_rules_underpopulation(sample_grid_2_states):
 
 def test_CGOL_rules_survival(sample_grid_2_states):
     """
-    Tests rule 2: cells with two or more neighbours survive
+    Test rule 2: cells with two or more neighbors survive.
 
     Parameters
     ----------
-    sample_grid_2_states : np.ndarray
-        the original sample grid
+    sample_grid_2_states : tuple
+        Fixture providing a sample 3x3 CGOL grid and state dictionary.
 
+    Returns
+    -------
+    None
+
+    Examples
+    --------
+    >>> test_CGOL_rules_survival(sample_grid_2_states)
     """
     sample_grid, rules_dict = sample_grid_2_states
     grid = sample_grid.copy()
@@ -197,14 +266,22 @@ def test_CGOL_rules_survival(sample_grid_2_states):
 
 def test_CGOL_rules_overcrowding(sample_grid_2_states):
     """
-    Tests rule 3: cells with more than 3 live neighbours die from
-    overcrowding
+    Test rule 3: cells with more than 3 live neighbors die from overcrowding.
 
     Parameters
     ----------
-    sample_grid_2_states : np.ndarray
-        the original sample grid
+    sample_grid_2_states : tuple
+        Fixture providing a sample 3x3 CGOL grid and state dictionary.
+
+    Returns
+    -------
+    None
+
+    Examples
+    --------
+    >>> test_CGOL_rules_overcrowding(sample_grid_2_states)
     """
+    
     sample_grid, rules_dict = sample_grid_2_states
     grid = sample_grid.copy()
     counts = np.zeros((2, 3, 3), dtype=int)
@@ -217,13 +294,22 @@ def test_CGOL_rules_overcrowding(sample_grid_2_states):
 
 def test_CGOL_rules_reproduction(sample_grid_2_states):
     """
-    Tests rule 4: DEAD cells with exactly 3 live neighbours are reborn
+    Test rule 4: dead cells with exactly 3 live neighbors are reborn.
 
     Parameters
     ----------
-    sample_grid_2_states : np.ndarray
-        the original sample grid
+    sample_grid_2_states : tuple
+        Fixture providing a sample 3x3 CGOL grid and state dictionary.
+
+    Returns
+    -------
+    None
+
+    Examples
+    --------
+    >>> test_CGOL_rules_reproduction(sample_grid_2_states)
     """
+    
     sample_grid, rules_dict = sample_grid_2_states
     grid = sample_grid.copy()
     grid[1, 1] = 0  # ensure dead
@@ -239,22 +325,40 @@ def test_CGOL_rules_reproduction(sample_grid_2_states):
 @pytest.fixture
 def sample_grid_disease():
     """
-    Creates a sample 3x3 grid for testing the rules function on
-    a sample grid with four states for disease spread.
+    Provide a sample 3x3 disease grid for testing rules functions.
+
+    Returns
+    -------
+    tuple
+        grid : np.ndarray
+            Sample 3x3 disease grid.
+        rules_dict : dict
+            Disease state dictionary.
+
+    Examples
+    --------
+    >>> sample_grid_disease()
+    (array([[1,1,1],[3,2,1],[1,1,1]]), {'dead':0,'healthy':1,'infected':2,'immune':3})
     """
     return np.array([[1, 1, 1], [3, 2, 1], [1, 1, 1]]), DISEASE_RULES_DICT
 
 
 def test_disease_rules_spread(sample_grid_disease):
     """
-    Tests rule 1: healthy cells become infected if they are near the
-    infection and the random chance for that cell is greater than the
-    infection rate
+    Test disease rule 1: healthy cells become infected if exposed.
 
     Parameters
     ----------
-    sample_grid_disease : pytest.fixture
-        fixture that generates the sample grid
+    sample_grid_disease : tuple
+        Fixture providing a sample 3x3 disease grid and state dictionary.
+
+    Returns
+    -------
+    None
+
+    Examples
+    --------
+    >>> test_disease_rules_spread(sample_grid_disease)
     """
     sample_grid, rules_dict = sample_grid_disease
 
@@ -281,13 +385,25 @@ def test_disease_rules_spread(sample_grid_disease):
 
 def test_disease_rules_immunity(sample_grid_disease):
     """
-    Tests rule 2: immune cells can become infected if
-    vaccine efficacy is low (here 0.0)
+    Test disease rule 2: immune cells can become infected if efficacy is low.
+
+    Notes
+    -----
+    Ensures that vaccinated cells (immune) can still become infected
+    if vaccine efficacy is set to 0.
 
     Parameters
     ----------
-    sample_grid_disease : pytest.fixture
-        fixture that generates the sample grid
+    sample_grid_disease : tuple
+        Fixture providing a sample 3x3 disease grid and state dictionary.
+
+    Returns
+    -------
+    None
+
+    Examples
+    --------
+    >>> test_disease_rules_immunity(sample_grid_disease)
     """
     sample_grid, rules_dict = sample_grid_disease
 
@@ -314,13 +430,25 @@ def test_disease_rules_immunity(sample_grid_disease):
 
 def test_disease_rules_efficacy(sample_grid_disease):
     """
-    Tests rule 3: immune cells can become infected if
-    vaccine efficacy is low (here 0.0)
+    Test disease rule 3: immune cells and vaccine efficacy interaction.
+
+    Notes
+    -----
+    Checks that immune cells do not become infected if vaccine efficacy is
+    maximal and that infection spreads according to rules.
 
     Parameters
     ----------
-    sample_grid_disease : pytest.fixture
-        fixture that generates the sample grid
+    sample_grid_disease : tuple
+        Fixture providing a sample 3x3 disease grid and state dictionary.
+
+    Returns
+    -------
+    None
+
+    Examples
+    --------
+    >>> test_disease_rules_efficacy(sample_grid_disease)
     """
     sample_grid, rules_dict = sample_grid_disease
 
@@ -346,7 +474,28 @@ def test_disease_rules_efficacy(sample_grid_disease):
 
 
 def test_disease_rules_stochastic_infection(sample_grid_disease):
-    """Test that infection spreads probabilistically."""
+    """
+    Test stochastic infection spread for disease rules.
+
+    Notes
+    -----
+    Runs multiple simulations to ensure that healthy cells become infected
+    probabilistically when exposed to infected neighbors. Checks that some,
+    but not all, neighbors get infected.
+
+    Parameters
+    ----------
+    sample_grid_disease : tuple
+        Fixture providing a sample 3x3 disease grid and state dictionary.
+
+    Returns
+    -------
+    None
+
+    Examples
+    --------
+    >>> test_disease_rules_stochastic_infection(sample_grid_disease)
+    """
 
     grid, states_dict = sample_grid_disease
     nstates = len(states_dict)
@@ -380,7 +529,27 @@ def test_disease_rules_stochastic_infection(sample_grid_disease):
 
 
 def test_disease_rules_stochastic_death(sample_grid_disease):
-    """Test that infected cells die probabilistically."""
+    """
+    Test stochastic death of infected cells.
+
+    Notes
+    -----
+    Runs multiple simulations to ensure that infected cells die
+    probabilistically according to the specified mortality rate.
+
+    Parameters
+    ----------
+    sample_grid_disease : tuple
+        Fixture providing a sample 3x3 disease grid and state dictionary.
+
+    Returns
+    -------
+    None
+
+    Examples
+    --------
+    >>> test_disease_rules_stochastic_death(sample_grid_disease)
+    """
     grid, states_dict = sample_grid_disease
     nstates = len(states_dict)
     counts = np.zeros((nstates, 3, 3), dtype=int)
@@ -410,7 +579,27 @@ def test_disease_rules_stochastic_death(sample_grid_disease):
 
 
 def test_disease_rules_stochastic_recovery(sample_grid_disease):
-    """Test that infected cells can recover probabilistically."""
+    """
+    Test stochastic recovery of infected cells.
+
+    Notes
+    -----
+    Runs multiple simulations to ensure that infected cells can recover
+    probabilistically according to the specified recovery rate.
+
+    Parameters
+    ----------
+    sample_grid_disease : tuple
+        Fixture providing a sample 3x3 disease grid and state dictionary.
+
+    Returns
+    -------
+    None
+
+    Examples
+    --------
+    >>> test_disease_rules_stochastic_recovery(sample_grid_disease)
+    """
     grid, states_dict = sample_grid_disease
     nstates = len(states_dict)
     counts = np.zeros((nstates, 3, 3), dtype=int)
@@ -440,7 +629,27 @@ def test_disease_rules_stochastic_recovery(sample_grid_disease):
 
 
 def test_disease_rules_stochastic_vaccine(sample_grid_disease):
-    """Test that immune (vaccinated) cells can become infected probabilistically."""
+    """
+    Test stochastic infection of immune (vaccinated) cells.
+
+    Notes
+    -----
+    Runs multiple simulations to ensure that vaccinated (immune) cells
+    can become infected probabilistically according to the vaccine efficacy.
+
+    Parameters
+    ----------
+    sample_grid_disease : tuple
+        Fixture providing a sample 3x3 disease grid and state dictionary.
+
+    Returns
+    -------
+    None
+
+    Examples
+    --------
+    >>> test_disease_rules_stochastic_vaccine(sample_grid_disease)
+    """
     grid, states_dict = sample_grid_disease
     grid[0, 0] = states_dict["immune"]  # ensure at least one immune cell
     nstates = len(states_dict)
