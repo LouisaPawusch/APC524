@@ -38,7 +38,6 @@ def convolve_neighbours_2D(
     ------
     ValueError
         If `grid` is not a 2D array.
-        If `kernel` is not a 2D array.
         If `nstates` is not a positive integer.
         If any value in `grid` is not in the range [0, nstates-1].
 
@@ -63,6 +62,18 @@ def convolve_neighbours_2D(
            [2, 1, 2]])
 
     """
+    if not isinstance(grid, np.ndarray):
+        raise TypeError(f"`grid` must be a numpy array, got {type(grid)}")
+
+    if not isinstance(kernel, np.ndarray):
+        raise TypeError(f"`kernel` must be a numpy array, got {type(kernel)}")
+
+    if not isinstance(nstates, int) or nstates <= 0:
+        raise ValueError(f"`nstates` must be a positive integer, got {nstates}")
+
+    if np.any(grid < 0) or np.any(grid >= nstates):
+        raise ValueError(f"All values in `grid` must be in range [0, {nstates-1}]")
+
     # count the neighbours in each state
     neighbour_counts = np.zeros((nstates, *grid.shape), dtype=int)
 
