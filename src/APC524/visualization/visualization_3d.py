@@ -1,9 +1,8 @@
 from __future__ import annotations
 
-import numpy as np
 import matplotlib.pyplot as plt
+import numpy as np
 from matplotlib.animation import FuncAnimation
-from mpl_toolkits.mplot3d import Axes3D  # for 3D plotting
 
 
 def animate_automaton_3D(automaton, interval: int = 500, save_as: str | None = None):
@@ -25,34 +24,37 @@ def animate_automaton_3D(automaton, interval: int = 500, save_as: str | None = N
         Matplotlib animation object
     """
     assert automaton is not None, "Automaton instance must be provided."
-    
+
     fig = plt.figure(figsize=(6, 6))
-    ax = fig.add_subplot(111, projection='3d')
-    
+    ax = fig.add_subplot(111, projection="3d")
+
     Z, Y, X = automaton.history[0].shape
     x, y, z = np.indices((X, Y, Z))
-    
-    img = ax.scatter([], [], [], c=[], cmap="binary", s=100)
-    ax.set_xlim(0, X-1)
-    ax.set_ylim(0, Y-1)
-    ax.set_zlim(0, Z-1)
+
+    ax.scatter([], [], [], c=[], cmap="binary", s=100)
+    ax.set_xlim(0, X - 1)
+    ax.set_ylim(0, Y - 1)
+    ax.set_zlim(0, Z - 1)
     ax.set_title("3D Game of Life")
-    
+
     def update(frame):
-        ax.cla()  # clear previous frame
+        ax.cla()
         grid = automaton.history[frame]
         # get coordinates of live cells (assuming 1 = alive)
         alive = np.argwhere(grid == 1)
         if alive.size > 0:
             ax.scatter(
-                alive[:, 2], alive[:, 1], alive[:, 0],  # X, Y, Z
-                c='black', s=100
+                alive[:, 2],
+                alive[:, 1],
+                alive[:, 0],  # X, Y, Z
+                c="black",
+                s=100,
             )
-        ax.set_xlim(0, X-1)
-        ax.set_ylim(0, Y-1)
-        ax.set_zlim(0, Z-1)
+        ax.set_xlim(0, X - 1)
+        ax.set_ylim(0, Y - 1)
+        ax.set_zlim(0, Z - 1)
         ax.set_title(f"3D Game of Life — Step {frame}")
-        return ax,
+        return (ax,)
 
     anim = FuncAnimation(
         fig,
@@ -60,9 +62,10 @@ def animate_automaton_3D(automaton, interval: int = 500, save_as: str | None = N
         frames=len(automaton.history),
         interval=interval,
         blit=False,
-        repeat=True
+        repeat=True,
     )
-    
+    save_as = "game_of_life_3d.gif"
+
     if save_as:
         print(f"Saving animation to {save_as}...")
         if save_as.endswith(".mp4"):
@@ -70,7 +73,7 @@ def animate_automaton_3D(automaton, interval: int = 500, save_as: str | None = N
         elif save_as.endswith(".gif"):
             anim.save(save_as, writer="imagemagick")
         else:
-            raise ValueError("File format not supported. Use .mp4 or .gif")
-    
-    return anim
+            err_msg = "File format not supported. Use .mp4 or .gif"
+            raise ValueError(err_msg)
 
+    plt.show()
