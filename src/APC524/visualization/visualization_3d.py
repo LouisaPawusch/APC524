@@ -7,15 +7,15 @@ from matplotlib.animation import FuncAnimation
 
 def animate_automaton_3D(automaton, interval: int = 500, save_as: str | None = None):
     """
-    Animate a 3D cellular automaton (e.g., 3x3x3 Game of Life).
+    Animate a 3D cellular automaton (3x3x3 CGOL).
 
     Parameters
     ----------
     automaton : object
         CellularAutomaton instance with a `.history` attribute containing 3D grids.
-    interval : int, optional
+    interval : int
         Time in milliseconds between frames, by default 500.
-    save_as : str or None, optional
+    save_as : str or None
         File name to save animation, supports .mp4 or .gif, by default None.
 
     Returns
@@ -40,7 +40,7 @@ def animate_automaton_3D(automaton, interval: int = 500, save_as: str | None = N
     def update(frame):
         ax.cla()
         grid = automaton.history[frame]
-        # get coordinates of live cells (assuming 1 = alive)
+        # get coordinates of live cells (1 = alive)
         alive = np.argwhere(grid == 1)
         if alive.size > 0:
             ax.scatter(

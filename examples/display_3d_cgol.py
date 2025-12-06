@@ -1,5 +1,6 @@
 """
-This script initializes a 3D cellular automaton using Conway's Game of Life rules and visualizes its evolution over time using Matplotlib's 3D plotting capabilities.
+This script initializes a 3D cellular automaton using Conway's Game of Life rules and
+ visualizes its evolution over time.
 
 Notes
 -----
