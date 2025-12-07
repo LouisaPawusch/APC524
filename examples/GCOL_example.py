@@ -17,6 +17,17 @@ def run_cgol_example(save_path, grid_size=(50, 50), steps=100, interval=200):
     """
     Example script to run Conway's Game of Life using the CellularAutomaton class
     and visualize it with the animate_automaton function.
+
+    Parameters
+    ----------
+    save_path : str
+        File path to save the animation ('.mp4' or '.gif').
+    grid_size : tuple of int, optional
+        Size of the simulation grid as (rows, columns). Default = (50, 50).
+    steps : int
+        Number of simulation steps. Default = 100.
+    interval : int
+        Delay between frames in milliseconds for the animation. Default = 200.
     """
 
     # Create CA instance
