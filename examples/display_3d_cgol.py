@@ -19,59 +19,73 @@ from __future__ import annotations
 import matplotlib.pyplot as plt
 import numpy as np
 from matplotlib.animation import FuncAnimation
-from scipy.signal import convolve
 
-from APC524.solver.kernels import MOORE_KERNEL_3D
-
-layers, rows, cols = 3, 3, 3
-nstates = 2
-steps = 10
-
-rng = np.random.default_rng()
-grid = rng.integers(0, nstates, size=(layers, rows, cols))
-
-kernel = MOORE_KERNEL_3D
-history = [grid.copy()]
+from APC524.solver import (
+    CGOL_3D_init,
+    CGOL_3D_rules,
+    convolve_neighbours_2D,
+)
 
 
-def step(grid):
-    neighbor_count = convolve(grid, kernel, mode="same")
-    new_grid = np.zeros_like(grid)
-    new_grid[
-        (grid == 1)
-        & ((neighbor_count == 4) | (neighbor_count == 5) | (neighbor_count == 6))
-    ] = 1
-    new_grid[(grid == 0) & ((neighbor_count == 5) | (neighbor_count == 6))] = 1
-    return new_grid
+def run_CGOL_3D_example(grid_size=(3, 3, 3), steps=10, save_as=None):
+    """
+    Example script to run Conway's Game of Life in 3D using the CellularAutomaton class
+    and visualize it with the animate_automaton function.
+
+    Parameters
+    ----------
+    grid_size : tuple of int, optional
+        Size of the simulation grid as (rows, columns). Default = (50, 100).
+    steps : int
+        Number of simulation steps to run. Default = 10.
+    save_as : string
+        path to save the gif output
+    """
+    ca = CGOL_3D_init(grid_size=grid_size, rng_seed=123)
+
+    history = ca.history
+    layers, rows, cols = history[0].shape
+
+    for _ in range(steps):
+        ca.step(CGOL_3D_rules, convolve_neighbours_2D)
+
+    fig, axes = plt.subplots(1, layers, figsize=(layers * 3, 3))
+    if layers == 1:
+        axes = [axes]
+
+    imgs = []
+    for i, ax in enumerate(axes):
+        img = ax.matshow(history[0][i], cmap="binary", vmin=0, vmax=1)
+        ax.set_title(f"Layer {i}, Step 0")
+        ax.set_xticks(np.arange(-0.5, cols, 1), minor=True)
+        ax.set_yticks(np.arange(-0.5, rows, 1), minor=True)
+        ax.grid(which="minor", color="gray", linestyle="-", linewidth=1)
+        ax.tick_params(
+            which="both", bottom=False, left=False, labelbottom=False, labelleft=False
+        )
+        imgs.append(img)
+
+    def update(frame):
+        for i, img in enumerate(imgs):
+            img.set_data(history[frame][i])
+            axes[i].set_title(f"Layer {i}, Step {frame}")
+        return imgs
+
+    anim = FuncAnimation(fig, update, frames=len(history), interval=500, blit=False)
+
+    if save_as:
+        print(f"Saving animation to {save_as}...")
+        if save_as.endswith(".mp4"):
+            anim.save(save_as, writer="ffmpeg")
+        elif save_as.endswith(".gif"):
+            anim.save(save_as, writer="imagemagick")
+        else:
+            err_msg = "File format not supported. Use .mp4 or .gif"
+            raise ValueError(err_msg)
+
+    return anim
 
 
-for _ in range(steps):
-    grid = step(grid)
-    history.append(grid.copy())
-
-fig, axes = plt.subplots(1, layers, figsize=(layers * 3, 3))
-if layers == 1:
-    axes = [axes]
-
-imgs = []
-for i, ax in enumerate(axes):
-    img = ax.matshow(history[0][i], cmap="binary", vmin=0, vmax=1)
-    ax.set_title(f"Layer {i}, Step 0")
-    ax.set_xticks(np.arange(-0.5, cols, 1), minor=True)
-    ax.set_yticks(np.arange(-0.5, rows, 1), minor=True)
-    ax.grid(which="minor", color="gray", linestyle="-", linewidth=1)
-    ax.tick_params(
-        which="both", bottom=False, left=False, labelbottom=False, labelleft=False
-    )
-    imgs.append(img)
-
-
-def update(frame):
-    for i, img in enumerate(imgs):
-        img.set_data(history[frame][i])
-        axes[i].set_title(f"Layer {i}, Step {frame}")
-    return imgs
-
-
-anim = FuncAnimation(fig, update, frames=len(history), interval=500, blit=False)
-plt.show()
+if __name__ == "__main__":
+    save_path = "/home/lt0663/Documents/classes/APC524/projectfigs/3d_cgol.gif"
+    run_CGOL_3D_example(save_as=save_path)

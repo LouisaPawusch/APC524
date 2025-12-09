@@ -6,7 +6,7 @@ from __future__ import annotations
 import numpy as np
 
 from APC524.solver.automaton import CellularAutomaton
-from APC524.solver.kernels import MOORE_KERNEL
+from APC524.solver.kernels import MOORE_KERNEL, MOORE_KERNEL_3D
 
 CGOL_RULES_DICT = {"dead": 0, "alive": 1}
 DISEASE_RULES_DICT = {"dead": 0, "healthy": 1, "infected": 2, "immune": 3}
@@ -289,5 +289,87 @@ def disease_rules(
         grid_update[dead_mask & (neighbour_counts[healthy_val] == 3)] = healthy_val
     else:
         grid_update[dead_mask] = dead_val  # if no rebirth, the dead stay dead
+
+    return grid_update
+
+
+def brians_brain_rules(grid=None, neighbour_counts=None, states_dict=None):
+    """
+    rule function for Brian's brain (used to make the fun animation in the title slide)
+    it is basically just CGOL but it looks cool and produces a lot of gliders and
+    spaceships...
+
+    NOTE: i didn't make an example for this because i did a janky version in
+    a notebook where i kept messing with the initial conditions until i liked
+    the way it looked - i just wanted to make a fun title slide :)
+
+    see: https://en.wikipedia.org/wiki/Brian%27s_Brain
+
+    Parameters
+    ----------
+    grid : np.ndarray
+        the 2D grid on which the game is being played
+    neighbour_counts : np.ndarray
+        the counts for each neighbour in each state as determined
+        by convolve_neighbours_2D
+    states_dict : Dict[str, int]
+        Dictionary defining the possible states for a cell
+
+    Returns
+    -------
+    grid_update : np.ndarray
+        the grid for the next step after the rules have been applied
+    """
+    dead_val = states_dict["dead"]
+    on_val = states_dict["on"]
+    dying_val = states_dict["dying"]
+
+    if neighbour_counts is None:
+        err_msg = "Neighbour counts must be provided"
+        raise ValueError(err_msg)
+
+    grid_update = grid.copy()
+
+    grid_update[(grid == dead_val) & (neighbour_counts[on_val] == 2)] = on_val
+    grid_update[grid == on_val] = dying_val
+    grid_update[grid == dying_val] = dead_val
+
+    return grid_update
+
+
+def CGOL_3D_init(grid_size=(3, 3, 3), rng_seed=None):
+    rng = np.random.default_rng(rng_seed)
+    states_dict = CGOL_RULES_DICT
+    nstates = len(states_dict)
+    grid = rng.integers(0, nstates, size=grid_size)
+    history = [grid.copy()]
+
+    return CellularAutomaton(
+        grid=grid,
+        kernel=MOORE_KERNEL_3D,
+        states_dict=states_dict,
+        nstates=nstates,
+        history=history,
+    )
+
+
+def CGOL_3D_rules(grid: np.ndarray, neighbour_counts: np.ndarray, states_dict: dict):
+    dead_val = states_dict["dead"]
+    alive_val = states_dict["alive"]
+
+    grid_update = grid.copy()
+    alive_mask = grid == alive_val
+    dead_mask = grid == dead_val
+
+    # Survival
+    grid_update[
+        alive_mask
+        & ((neighbour_counts[alive_val] < 4) | (neighbour_counts[alive_val] > 6))
+    ] = dead_val
+    # Birth
+    grid_update[
+        dead_mask
+        & ((neighbour_counts[alive_val] == 5) | (neighbour_counts[alive_val] == 6))
+    ] = alive_val
 
     return grid_update

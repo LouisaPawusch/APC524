@@ -2,18 +2,28 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.0.7] - 12-09-2025
+Added an example of how the disease spread example could be implemented as an ensemble
+
+### Added
+**[MAJOR]** `examples/disease_parallel_example.py` : creates an ensemble version of the simulation and benchmarks it in parallel vs ensemble
+
+### Changed
+**[MAJOR]** `examples/display_3d_cgol.py` : refactored to be consistent with repo structure and use the CA class.
+**[MINOR]** `src/APC524/visualization/visualization.py` : added function to do ensemble animation of disease
+
 ## [0.0.6] - 12-05-2025
 Completed the implementation of the 3D example of CGOL and added lingering documentation to files in the examples folder.
 
 ### Added
-- **[MAJOR]** 'examples/display_3d_cgol.py': creates random 3x3x3 grid and uses the rules of CGOL to evolve the game
-- **[MAJOR]** 'src/APC524/visualization/vizualization_3d': creates the 3D animation based off of 'visualization.py'
+- **[MAJOR]** `examples/display_3d_cgol.py`: creates random 3x3x3 grid and uses the rules of CGOL to evolve the game
+- **[MAJOR]** `src/APC524/visualization/vizualization_3d`: creates the 3D animation based off of `visualization.py`
 
 ### Changed
-- **[MINOR]** 'src/APC524/solver/kernels.py': added the 3D Moore kernel
-- **[MINOR]** 'src/APC524/visualization/__init__.py': added the animte_automaton_3D function
-- **[MINOR]** 'examples/GCOL_example.py': added documentation
-- **[MINOR]** 'examples/disease_example.py': added documentation
+- **[MINOR]** `src/APC524/solver/kernels.py`: added the 3D Moore kernel
+- **[MINOR]** `src/APC524/visualization/__init__.py`: added the animte_automaton_3D function
+- **[MINOR]** `examples/GCOL_example.py`: added documentation
+- **[MINOR]** `examples/disease_example.py`: added documentation
 
 ## [0.0.5] - 11-03-2025
 Added new tests, added a new rules set for disease spread.
@@ -50,7 +60,7 @@ CI is run using pre-commit, nox and GitHub Actions and was tested locally with a
 
 ### Added
 * **[MAJOR]** `noxfile.py` : noxfile running our testing suite through pytest
-* **[MAJOR]** `.github/workflows/ci.yml' : CI structure running a basic set of GitHub actions to ensure we are passing all tests upon push to all branches
+* **[MAJOR]** `.github/workflows/ci.yml` : CI structure running a basic set of GitHub actions to ensure we are passing all tests upon push to all branches
 * **[MAJOR]** `.pre-commit-config.yaml` : config file for the pre-commit tool. This is set up to autoformat all code with ruff, so this should be run before adding files to a commit to ensure compliance with PEP-8 standard
 
 ### Changed

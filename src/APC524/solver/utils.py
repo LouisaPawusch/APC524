@@ -31,9 +31,6 @@ def convolve_neighbours_2D(
         3D array in the shape (nstates, rows, cols) where neighbour_counts[x, i, j]
         is the number of cells in state x surrounding the cell at [i, j]
 
-    Examples
-    --------
-    [add examples here]
 
     """
     # count the neighbours in each state
@@ -47,8 +44,5 @@ def convolve_neighbours_2D(
         # use mode='constant' here so that it doesn't do wrap around behaviour
         # instead if on outside of grid, will fill with a buffer of 0s
         neighbour_counts[state] = convolve(mask, kernel, mode="constant", cval=0)
-
-        # NOTE: at some point, we need to enforce that the states in the user rules
-        # count up from 0 or pass a cval to this function to denote dead state!
 
     return neighbour_counts
