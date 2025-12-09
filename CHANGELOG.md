@@ -2,11 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
-## [0.0.7] - 12-05-2025
+## [0.0.7] - 12-09-2025
 Added an example of how the disease spread example could be implemented as an ensemble
 
 ### Added
 **[MAJOR]** `examples/disease_parallel_example.py` : creates an ensemble version of the simulation and benchmarks it in parallel vs ensemble
+
+### Changed
+**[MAJOR]** `examples/display_3d_cgol.py` : refactored to be consistent with repo structure and use the CA class.
 **[MINOR]** `src/APC524/visualization/visualization.py` : added function to do ensemble animation of disease
 
 ## [0.0.6] - 12-05-2025

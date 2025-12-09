@@ -6,7 +6,7 @@ from __future__ import annotations
 import numpy as np
 
 from APC524.solver.automaton import CellularAutomaton
-from APC524.solver.kernels import MOORE_KERNEL
+from APC524.solver.kernels import MOORE_KERNEL, MOORE_KERNEL_3D
 
 CGOL_RULES_DICT = {"dead": 0, "alive": 1}
 DISEASE_RULES_DICT = {"dead": 0, "healthy": 1, "infected": 2, "immune": 3}
@@ -333,5 +333,43 @@ def brians_brain_rules(grid=None, neighbour_counts=None, states_dict=None):
     grid_update[(grid == dead_val) & (neighbour_counts[on_val] == 2)] = on_val
     grid_update[grid == on_val] = dying_val
     grid_update[grid == dying_val] = dead_val
+
+    return grid_update
+
+
+def CGOL_3D_init(grid_size=(3, 3, 3), rng_seed=None):
+    rng = np.random.default_rng(rng_seed)
+    states_dict = CGOL_RULES_DICT
+    nstates = len(states_dict)
+    grid = rng.integers(0, nstates, size=grid_size)
+    history = [grid.copy()]
+
+    return CellularAutomaton(
+        grid=grid,
+        kernel=MOORE_KERNEL_3D,
+        states_dict=states_dict,
+        nstates=nstates,
+        history=history,
+    )
+
+
+def CGOL_3D_rules(grid: np.ndarray, neighbour_counts: np.ndarray, states_dict: dict):
+    dead_val = states_dict["dead"]
+    alive_val = states_dict["alive"]
+
+    grid_update = grid.copy()
+    alive_mask = grid == alive_val
+    dead_mask = grid == dead_val
+
+    # Survival
+    grid_update[
+        alive_mask
+        & ((neighbour_counts[alive_val] < 4) | (neighbour_counts[alive_val] > 6))
+    ] = dead_val
+    # Birth
+    grid_update[
+        dead_mask
+        & ((neighbour_counts[alive_val] == 5) | (neighbour_counts[alive_val] == 6))
+    ] = alive_val
 
     return grid_update
