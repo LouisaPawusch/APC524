@@ -170,6 +170,9 @@ def combine_histories_to_array(histories):
 
 
 def main():
+    """
+    Main function to run the parallel ensemble example
+    """
     n_members = 100
     grid_size = (50, 100)
     steps = 150

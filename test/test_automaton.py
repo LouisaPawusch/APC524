@@ -23,18 +23,11 @@ def sample_grid_2_states():
     return grid, nstates, states_dict
 
 
-# ----------------------------
-# Test the CA object
-# ----------------------------
 @pytest.mark.parametrize("kernel", [MOORE_KERNEL, VON_NEUMANN_KERNEL])
 def test_CA_step_with_both_kernels(sample_grid_2_states, kernel):
     """
     Test checks whether after stepping, the grid cells change and the
     and add to the history (verifies step, rules are being called)
-
-    We could probably add a much better explicit test here which actively
-    steps through the CA for the initial grid (they all die p fast) and
-    checks those.
 
     Parameters
     ----------
@@ -43,7 +36,6 @@ def test_CA_step_with_both_kernels(sample_grid_2_states, kernel):
     kernel : np.ndarray
         the sample kernel generated in the fixture (iterates search
         over the Moore and Von Neumann neighbourhoods)
-
     """
     grid, nstates, states_dict = sample_grid_2_states
 
