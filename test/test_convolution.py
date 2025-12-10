@@ -8,6 +8,10 @@ from APC524.solver.utils import convolve_neighbours_2D
 
 
 def test_convolve_neighbours():
+    """
+    Test the convolution function on a simple 3x3 grid with known neighbour
+    counts using the Moore kernel.
+    """
     grid = np.array([[0, 1, 0], [1, 1, 0], [0, 0, 0]])
     expected_counts_for_state_1 = np.array([[3, 2, 2], [2, 2, 2], [2, 2, 1]])
     neighbour_counts = convolve_neighbours_2D(grid, MOORE_KERNEL, nstates=2)
@@ -46,11 +50,6 @@ def test_neighbour_counts_2_states(sample_grid_2_states, kernel):
     on the type of kernel used (Von Neumann or Moore) for a sample grid
     with two states
 
-    NOTE: I'm not sure if this is a bad way to do this and so I am
-    just parameterizing and using fixtures for the sake of parameterizing
-    and using fixtures... if it would be better to split up these tests we
-    definitely can.
-
     Parameters
     ----------
     sample_grid_2_states : np.ndarray
@@ -81,7 +80,7 @@ def test_neighbour_counts_2_states(sample_grid_2_states, kernel):
         )
 
     else:
-        # assumes Von Neumann, maybe we could do this better?
+        # assumes Von Neumann
         expected_counts = np.array(
             [[[2, 1, 2], [1, 4, 1], [2, 1, 2]], [[0, 2, 0], [2, 0, 2], [0, 2, 0]]]
         )

@@ -346,7 +346,14 @@ def test_disease_rules_efficacy(sample_grid_disease):
 
 
 def test_disease_rules_stochastic_infection(sample_grid_disease):
-    """Test that infection spreads probabilistically."""
+    """
+    Test that infection spreads probabilistically.
+
+    Parameters
+    ----------
+    sample_grid_disease : pytest.fixture
+        fixture that generates the sample grid
+    """
 
     grid, states_dict = sample_grid_disease
     nstates = len(states_dict)
@@ -380,7 +387,14 @@ def test_disease_rules_stochastic_infection(sample_grid_disease):
 
 
 def test_disease_rules_stochastic_death(sample_grid_disease):
-    """Test that infected cells die probabilistically."""
+    """
+    Test that infected cells die probabilistically.
+    
+    Parameters
+    ----------
+    sample_grid_disease : pytest.fixture
+        fixture that generates the sample grid
+    """
     grid, states_dict = sample_grid_disease
     nstates = len(states_dict)
     counts = np.zeros((nstates, 3, 3), dtype=int)
@@ -410,7 +424,13 @@ def test_disease_rules_stochastic_death(sample_grid_disease):
 
 
 def test_disease_rules_stochastic_recovery(sample_grid_disease):
-    """Test that infected cells can recover probabilistically."""
+    """
+    Test that infected cells can recover probabilistically.
+    Parameters
+    ----------
+    sample_grid_disease : pytest.fixture
+        fixture that generates the sample grid
+    """
     grid, states_dict = sample_grid_disease
     nstates = len(states_dict)
     counts = np.zeros((nstates, 3, 3), dtype=int)
@@ -440,7 +460,14 @@ def test_disease_rules_stochastic_recovery(sample_grid_disease):
 
 
 def test_disease_rules_stochastic_vaccine(sample_grid_disease):
-    """Test that immune (vaccinated) cells can become infected probabilistically."""
+    """
+    Test that immune (vaccinated) cells can become infected probabilistically.
+    
+    Parameters
+    ----------
+    sample_grid_disease : pytest.fixture
+        fixture that generates the sample grid
+    """
     grid, states_dict = sample_grid_disease
     grid[0, 0] = states_dict["immune"]  # ensure at least one immune cell
     nstates = len(states_dict)
