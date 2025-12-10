@@ -56,5 +56,7 @@ def run_sonified_cgol_example(
 
 
 if __name__ == "__main__":
-    save_name = "cgol_sonification"
+    outdir = Path("projectfigs").expanduser()
+    outdir.mkdir(parents=True, exist_ok=True)
+    save_name = str(outdir / "cgol_sonification")
     run_sonified_cgol_example(save_name=save_name)
