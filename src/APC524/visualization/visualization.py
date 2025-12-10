@@ -83,11 +83,6 @@ def animate_disease(
     Elaborates on the basic automaton animation to show the disease spread
     example
 
-    NOTE: these animation functions are a good example of why it might
-    be good to make objects for each example that inherit from each other?
-    That way we can basically abstract over having 1000 functions to
-    animate each different experiment that we run?
-
     Parameters
     ----------
     automaton : object

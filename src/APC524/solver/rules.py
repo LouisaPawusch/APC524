@@ -54,11 +54,6 @@ def CGOL_rules(grid=None, neighbour_counts=None, states_dict=None):
     Function lays out the rules for basic CGOL and determines
     what happens to each cell in the grid.
 
-    NOTE: I would like to generalize this more and move the
-    generation of the new grid to the overall class. This would
-    allow the user to define their own rule set without having to
-    do all the work of deciding how to assign the grid...
-
     Parameters
     ----------
     grid : np.ndarray
@@ -299,10 +294,6 @@ def brians_brain_rules(grid=None, neighbour_counts=None, states_dict=None):
     it is basically just CGOL but it looks cool and produces a lot of gliders and
     spaceships...
 
-    NOTE: i didn't make an example for this because i did a janky version in
-    a notebook where i kept messing with the initial conditions until i liked
-    the way it looked - i just wanted to make a fun title slide :)
-
     see: https://en.wikipedia.org/wiki/Brian%27s_Brain
 
     Parameters
@@ -338,6 +329,20 @@ def brians_brain_rules(grid=None, neighbour_counts=None, states_dict=None):
 
 
 def CGOL_3D_init(grid_size=(3, 3, 3), rng_seed=None):
+    """
+    Initializes a 3D Conway's Game of Life cellular automaton.
+    Parameters
+    ----------
+    grid_size : tuple
+        The size of the 3D grid.
+    rng_seed : int, optional
+        Seed for the random number generator.
+
+    Returns
+    -------
+    CellularAutomaton
+        An instance of the CellularAutomaton class.
+    """
     rng = np.random.default_rng(rng_seed)
     states_dict = CGOL_RULES_DICT
     nstates = len(states_dict)
@@ -354,6 +359,22 @@ def CGOL_3D_init(grid_size=(3, 3, 3), rng_seed=None):
 
 
 def CGOL_3D_rules(grid: np.ndarray, neighbour_counts: np.ndarray, states_dict: dict):
+    """
+    Applies the rules of Conway's Game of Life in 3D.
+    Parameters
+    ----------
+    grid : np.ndarray
+        The current state of the 3D grid.
+    neighbour_counts : np.ndarray
+        The counts of alive neighbours for each cell.
+    states_dict : dict
+        A dictionary mapping state names to their corresponding integer values.
+
+    Returns
+    -------
+    np.ndarray
+        The updated grid after applying the rules.
+    """
     dead_val = states_dict["dead"]
     alive_val = states_dict["alive"]
 
