@@ -191,7 +191,7 @@ def main():
 
     states_dict = {"dead": 0, "healthy": 1, "infected": 2, "immune": 3}
 
-    outdir = Path("~/Documents/classes/APC524/projectfigs").expanduser()
+    outdir = Path("projectfigs").expanduser()
     outdir.mkdir(parents=True, exist_ok=True)
 
     # -----------------------------

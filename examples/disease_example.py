@@ -61,5 +61,7 @@ def run_disease_example(save_path, grid_size=(50, 100), steps=100, interval=200)
 
 
 if __name__ == "__main__":
-    save_path = "examples/disease_animation.gif"  # Change to .mp4 if preferred
+    outdir = Path("projectfigs").expanduser()
+    outdir.mkdir(parents=True, exist_ok=True)
+    save_path = str(outdir / "disease_animation.gif")  # Change to .mp4 if preferred
     run_disease_example(save_path=save_path)

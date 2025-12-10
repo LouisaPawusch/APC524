@@ -42,5 +42,7 @@ def run_cgol_example(save_path, grid_size=(50, 50), steps=100, interval=200):
 
 
 if __name__ == "__main__":
-    save_path = "cgol_animation.gif"  # Change to .mp4 if preferred
+    outdir = Path("projectfigs").expanduser()
+    outdir.mkdir(parents=True, exist_ok=True)
+    save_path = str(outdir / "cgol_animation.gif")
     run_cgol_example(save_path=save_path)

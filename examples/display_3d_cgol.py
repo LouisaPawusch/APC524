@@ -16,6 +16,8 @@ Example
 
 from __future__ import annotations
 
+from pathlib import Path
+
 import matplotlib.pyplot as plt
 import numpy as np
 from matplotlib.animation import FuncAnimation
@@ -87,5 +89,7 @@ def run_CGOL_3D_example(grid_size=(3, 3, 3), steps=10, save_as=None):
 
 
 if __name__ == "__main__":
-    save_path = "/home/lt0663/Documents/classes/APC524/projectfigs/3d_cgol.gif"
+    outdir = Path("projectfigs").expanduser()
+    outdir.mkdir(parents=True, exist_ok=True)
+    save_path = str(outdir / "3d_cgol.gif")
     run_CGOL_3D_example(save_as=save_path)
