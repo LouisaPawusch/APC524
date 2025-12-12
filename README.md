@@ -4,7 +4,7 @@ Course: APC524 - Fall 2025
 
 ## Overview
 This repository contains a small Python Library for building and experimenting with **cellular automata (CA)**.
-We provide a reusable `CellularAutomaton` class plus a set of tools to define
+We provide a reusable `CellularAutomaton` class and a set of tools to define
 
 - the geometry of the grid (2D or 3D)
 - the neighborhood kernel (Moore or von Neumann)
@@ -17,7 +17,7 @@ Our example models are:
 - **3D Game of Life** - extension to three spatial dimensions
 - **SVIR Epidemic Model** - stochastic epidemiological CA with ensemble runs
 - **Generating Music** - mapping CGOL dynamics to a simple musical sequence to generate a melody
-  
+
 They live in the examples/ directory.
 
 ## Installation
